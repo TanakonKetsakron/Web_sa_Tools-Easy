@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <!--
+    REGISTER PAGE — register.html
+    ─────────────────────────────────────────────────
+    INPUT:   Name, Email, Password, Confirm Password
+    PROCESS: validateRegisterForm() → ตรวจสอบ email ซ้ำ →
+             registerUser() → บันทึกลง LocalStorage
+    OUTPUT:  User ใน LocalStorage / Error messages / Redirect to login
+    ─────────────────────────────────────────────────
+  -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>สมัครสมาชิก — Tools Easy</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ── NAVBAR ── -->
+  <nav class="navbar">
+    <div class="container">
+      <div class="navbar__inner">
+        <a href="index.html" class="navbar__logo">
+          <div class="logo-icon">🔧</div>
+          Tools Easy
+        </a>
+        <ul class="navbar__links">
+          <li><a href="index.html">🏠 Home</a></li>
+          <li>
+            <a href="cart.html" class="cart-badge">
+              🛒 Cart
+              <span class="badge" id="cart-count" style="display:none">0</span>
+            </a>
+          </li>
+          <li><a href="login.html" id="nav-login">🔑 Login</a></li>
+          <li><a href="#" id="nav-logout" style="display:none">🚪 Logout</a></li>
+        </ul>
+        <button class="navbar__hamburger" id="hamburger" aria-label="เมนู">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+    <div class="navbar__mobile" id="mobile-nav">
+      <a href="index.html">🏠 Home</a>
+      <a href="login.html">🔑 Login</a>
+    </div>
+  </nav>
+
+  <!-- ── REGISTER FORM ── -->
+  <div class="auth-page">
+    <div class="auth-card fade-in" style="max-width:460px">
+      <div style="text-align:center;font-size:3rem;margin-bottom:8px">📝</div>
+      <h1 class="auth-card__title">สมัครสมาชิก</h1>
+      <p class="auth-card__sub">สร้างบัญชีใหม่กับ Tools Easy</p>
+
+      <form id="register-form">
+        <div class="form-group">
+          <label class="form-label" for="reg-name">ชื่อ-นามสกุล</label>
+          <input type="text" id="reg-name" class="form-control" placeholder="เช่น สมชาย ใจดี" autocomplete="name">
+          <span class="form-error" id="reg-name-error"></span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reg-email">อีเมล</label>
+          <input type="email" id="reg-email" class="form-control" placeholder="your@email.com" autocomplete="email">
+          <span class="form-error" id="reg-email-error"></span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reg-password">
+            รหัสผ่าน
+            <span style="font-weight:400;color:var(--gray-light);font-size:.78rem">(อย่างน้อย 8 ตัวอักษร)</span>
+          </label>
+          <input type="password" id="reg-password" class="form-control" placeholder="••••••••" autocomplete="new-password">
+          <span class="form-error" id="reg-password-error"></span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reg-confirm">ยืนยันรหัสผ่าน</label>
+          <input type="password" id="reg-confirm" class="form-control" placeholder="••••••••" autocomplete="new-password">
+          <span class="form-error" id="reg-confirm-error"></span>
+        </div>
+
+        <!-- Password strength indicator -->
+        <div id="password-strength" style="display:none">
+          <div style="font-size:.75rem;font-weight:600;margin-bottom:4px;color:var(--gray-light)">ความแข็งแกร่งของรหัสผ่าน:</div>
+          <div style="height:4px;border-radius:2px;background:var(--border);overflow:hidden">
+            <div id="strength-bar" style="height:100%;width:0;transition:width .3s,background .3s"></div>
+          </div>
+          <div id="strength-label" style="font-size:.75rem;margin-top:4px;color:var(--gray-light)"></div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg btn-block">
+          สมัครสมาชิก
+        </button>
+      </form>
+
+      <!-- Terms note -->
+      <p style="font-size:.75rem;color:var(--gray-muted);text-align:center;margin-top:12px">
+        การสมัครสมาชิกถือว่าคุณยอมรับ <a href="#" style="color:var(--navy)">เงื่อนไขการใช้บริการ</a>
+      </p>
+
+      <div class="auth-link">
+        มีบัญชีแล้ว? <a href="login.html">เข้าสู่ระบบ</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <p>&copy; 2567 <strong>Tools Easy</strong> — เครื่องมือช่างคุณภาพ</p>
+  </footer>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+  <div class="loading-overlay" id="loading-overlay">
+    <div class="spinner"></div>
+    <div class="loading-text">กำลังสมัครสมาชิก...</div>
+  </div>
+
+  <script src="js/script.js"></script>
+  <script>
+    /* ── Password Strength Indicator ── */
+    document.getElementById('reg-password').addEventListener('input', function() {
+      const val = this.value;
+      const bar = document.getElementById('strength-bar');
+      const label = document.getElementById('strength-label');
+      const wrapper = document.getElementById('password-strength');
+
+      if (!val) { wrapper.style.display = 'none'; return; }
+      wrapper.style.display = 'block';
+
+      let score = 0;
+      if (val.length >= 8)  score++;
+      if (val.length >= 12) score++;
+      if (/[A-Z]/.test(val)) score++;
+      if (/[0-9]/.test(val)) score++;
+      if (/[^A-Za-z0-9]/.test(val)) score++;
+
+      const levels = [
+        { pct: 20, color: '#EF4444', text: 'อ่อนมาก' },
+        { pct: 40, color: '#F59E0B', text: 'อ่อน' },
+        { pct: 60, color: '#FBBF24', text: 'ปานกลาง' },
+        { pct: 80, color: '#34D399', text: 'แข็งแกร่ง' },
+        { pct: 100, color: '#10B981', text: 'แข็งแกร่งมาก' },
+      ];
+      const level = levels[Math.min(score - 1, 4)] || levels[0];
+      bar.style.width  = level.pct + '%';
+      bar.style.background = level.color;
+      label.textContent = level.text;
+      label.style.color = level.color;
+    });
+  </script>
+</body>
+</html>

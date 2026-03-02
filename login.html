@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <!--
+    LOGIN PAGE — login.html
+    ─────────────────────────────────────────────────
+    INPUT:   Email, Password
+    PROCESS: validateLoginForm() → loginUser() → set session
+    OUTPUT:  Session ใน LocalStorage / Error message / Redirect
+    ─────────────────────────────────────────────────
+  -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>เข้าสู่ระบบ — Tools Easy</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ── NAVBAR ── -->
+  <nav class="navbar">
+    <div class="container">
+      <div class="navbar__inner">
+        <a href="index.html" class="navbar__logo">
+          <div class="logo-icon">🔧</div>
+          Tools Easy
+        </a>
+        <ul class="navbar__links">
+          <li><a href="index.html">🏠 Home</a></li>
+          <li>
+            <a href="cart.html" class="cart-badge">
+              🛒 Cart
+              <span class="badge" id="cart-count" style="display:none">0</span>
+            </a>
+          </li>
+          <li><a href="login.html" class="active" id="nav-login">🔑 Login</a></li>
+          <li><a href="#" id="nav-logout" style="display:none">🚪 Logout</a></li>
+        </ul>
+        <button class="navbar__hamburger" id="hamburger" aria-label="เมนู">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+    <div class="navbar__mobile" id="mobile-nav">
+      <a href="index.html">🏠 Home</a>
+      <a href="cart.html">🛒 Cart</a>
+      <a href="login.html" class="active">🔑 Login</a>
+    </div>
+  </nav>
+
+  <!-- ── LOGIN FORM ── -->
+  <div class="auth-page">
+    <div class="auth-card fade-in">
+      <div style="text-align:center;font-size:3rem;margin-bottom:8px">🔑</div>
+      <h1 class="auth-card__title">เข้าสู่ระบบ</h1>
+      <p class="auth-card__sub">ยินดีต้อนรับกลับสู่ Tools Easy</p>
+
+      <form id="login-form">
+        <div class="form-group">
+          <label class="form-label" for="login-email">อีเมล</label>
+          <input type="email" id="login-email" class="form-control" placeholder="your@email.com" autocomplete="email">
+          <span class="form-error" id="login-email-error"></span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="login-password">รหัสผ่าน</label>
+          <input type="password" id="login-password" class="form-control" placeholder="••••••••" autocomplete="current-password">
+          <span class="form-error" id="login-password-error"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg btn-block">
+          เข้าสู่ระบบ
+        </button>
+      </form>
+
+      <!-- Demo Fill Button -->
+      <div style="margin-top:16px;text-align:center">
+        <button id="demo-fill" class="btn btn-outline btn-sm" style="font-size:.80rem">
+          🎭 ทดลองเข้าระบบด้วยบัญชี Demo
+        </button>
+      </div>
+
+      <!-- Demo Account Info -->
+      <div style="background:#EEF2FF;border-radius:8px;padding:12px 16px;margin-top:12px;font-size:.80rem;color:var(--navy)">
+        <strong>🔐 Demo Account:</strong><br>
+        Email: <code>demo@toolseasy.th</code><br>
+        Password: <code>demo1234</code>
+      </div>
+
+      <div class="auth-link">
+        ยังไม่มีบัญชี? <a href="register.html">สมัครสมาชิก</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <p>&copy; 2567 <strong>Tools Easy</strong> — เครื่องมือช่างคุณภาพ</p>
+  </footer>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+  <div class="loading-overlay" id="loading-overlay">
+    <div class="spinner"></div>
+    <div class="loading-text">กำลังเข้าสู่ระบบ...</div>
+  </div>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

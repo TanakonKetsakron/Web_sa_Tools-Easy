@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <!--
+    ADMIN PAGE — admin.html
+    ─────────────────────────────────────────────────
+    INPUT:   Product form (name, category, price, stock, etc.)
+             Edit button (pre-fill form), Delete button
+    PROCESS: addProduct() / updateProduct() / deleteProduct() →
+             บันทึกลง LocalStorage → render table ใหม่
+    OUTPUT:  Updated admin product table + Toast notification
+    ─────────────────────────────────────────────────
+  -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard — Tools Easy</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ── NAVBAR ── -->
+  <nav class="navbar">
+    <div class="container">
+      <div class="navbar__inner">
+        <a href="index.html" class="navbar__logo">
+          <div class="logo-icon">🔧</div>
+          Tools Easy
+        </a>
+        <ul class="navbar__links">
+          <li><a href="index.html">🏠 Home</a></li>
+          <li>
+            <a href="cart.html" class="cart-badge">
+              🛒 Cart
+              <span class="badge" id="cart-count" style="display:none">0</span>
+            </a>
+          </li>
+          <li><a href="login.html" id="nav-login">🔑 Login</a></li>
+          <li><a href="#" id="nav-logout" style="display:none">🚪 Logout</a></li>
+          <li><a href="admin.html" class="active">⚙️ Admin</a></li>
+          <li><a href="orders.html">📋 Orders</a></li>
+        </ul>
+        <button class="navbar__hamburger" id="hamburger" aria-label="เมนู">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+    <div class="navbar__mobile" id="mobile-nav">
+      <a href="index.html">🏠 Home</a>
+      <a href="admin.html" class="active">⚙️ Admin</a>
+      <a href="orders.html">📋 Orders</a>
+    </div>
+  </nav>
+
+  <!-- ── PAGE HEADER ── -->
+  <div class="page-header">
+    <div class="container">
+      <h1>⚙️ Admin Dashboard</h1>
+      <p>จัดการสินค้าและข้อมูลระบบ</p>
+    </div>
+  </div>
+
+  <!-- ── ADMIN CONTENT ── -->
+  <div class="container" style="padding-bottom:60px">
+
+    <!-- Stats Bar -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:28px">
+      <div class="card" style="padding:20px;text-align:center">
+        <div style="font-size:1.8rem;font-weight:800;color:var(--navy)" id="stat-total">-</div>
+        <div style="font-size:.82rem;color:var(--gray-light);margin-top:4px">สินค้าทั้งหมด</div>
+      </div>
+      <div class="card" style="padding:20px;text-align:center">
+        <div style="font-size:1.8rem;font-weight:800;color:var(--warning)" id="stat-low">-</div>
+        <div style="font-size:.82rem;color:var(--gray-light);margin-top:4px">สต็อกต่ำ (≤5)</div>
+      </div>
+      <div class="card" style="padding:20px;text-align:center">
+        <div style="font-size:1.8rem;font-weight:800;color:var(--danger)" id="stat-out">-</div>
+        <div style="font-size:.82rem;color:var(--gray-light);margin-top:4px">สินค้าหมด</div>
+      </div>
+      <div class="card" style="padding:20px;text-align:center">
+        <div style="font-size:1.8rem;font-weight:800;color:var(--success)" id="stat-orders">-</div>
+        <div style="font-size:.82rem;color:var(--gray-light);margin-top:4px">คำสั่งซื้อ</div>
+      </div>
+    </div>
+
+    <div class="admin-layout">
+      <!-- ── FORM PANEL ── -->
+      <div class="admin-panel">
+        <div class="admin-panel__title" id="form-title">➕ เพิ่มสินค้าใหม่</div>
+        <form id="product-form">
+          <div class="form-group">
+            <label class="form-label">ชื่อสินค้า *</label>
+            <input type="text" id="p-name" class="form-control" placeholder="เช่น Bosch GSB 120-LI">
+          </div>
+          <div class="form-group">
+            <label class="form-label">หมวดหมู่ *</label>
+            <input type="text" id="p-category" class="form-control" placeholder="เช่น Power Tools, Hand Tools">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">ราคา (฿) *</label>
+              <input type="number" id="p-price" class="form-control" placeholder="2490" min="0">
+            </div>
+            <div class="form-group">
+              <label class="form-label">ราคาปกติ (฿)</label>
+              <input type="number" id="p-original" class="form-control" placeholder="2990" min="0">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">สต็อก (ชิ้น) *</label>
+              <input type="number" id="p-stock" class="form-control" placeholder="10" min="0">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Emoji ไอคอน</label>
+              <input type="text" id="p-emoji" class="form-control" placeholder="🔧">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">แบรนด์</label>
+            <input type="text" id="p-brand" class="form-control" placeholder="เช่น Bosch, Makita">
+          </div>
+          <div class="form-group">
+            <label class="form-label">การรับประกัน</label>
+            <input type="text" id="p-warranty" class="form-control" placeholder="เช่น 2 ปี">
+          </div>
+          <div class="form-group">
+            <label class="form-label">คำอธิบายสินค้า</label>
+            <textarea id="p-desc" class="form-control" rows="3" placeholder="อธิบายสินค้า..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">
+            💾 บันทึกสินค้า
+          </button>
+          <button type="button" class="btn btn-outline btn-block" id="cancel-edit" style="display:none;margin-top:8px">
+            ✕ ยกเลิกการแก้ไข
+          </button>
+        </form>
+      </div>
+
+      <!-- ── TABLE ── -->
+      <div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+          <h2 style="font-size:1.15rem;font-weight:700;color:var(--navy)">📦 รายการสินค้าทั้งหมด</h2>
+          <button class="btn btn-outline btn-sm" onclick="location.reload()">🔄 รีเฟรช</button>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th></th>
+                <th>ชื่อสินค้า</th>
+                <th>ราคา</th>
+                <th>สต็อก</th>
+                <th>จัดการ</th>
+              </tr>
+            </thead>
+            <tbody id="admin-table-body">
+              <tr><td colspan="5" style="text-align:center;padding:32px;color:var(--gray-light)">กำลังโหลด...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <p>&copy; 2567 <strong>Tools Easy</strong> — Admin Panel</p>
+  </footer>
+
+  <!-- ── DELETE CONFIRM MODAL ── -->
+  <div class="modal-overlay" id="delete-modal">
+    <div class="modal">
+      <div class="modal__header">
+        <div class="modal__title">🗑️ ยืนยันการลบสินค้า</div>
+        <button class="modal__close">✕</button>
+      </div>
+      <div class="modal__body">
+        คุณแน่ใจหรือไม่ว่าต้องการลบสินค้านี้? การกระทำนี้ไม่สามารถย้อนกลับได้
+      </div>
+      <div class="modal__footer">
+        <button class="btn btn-outline" onclick="closeModal('delete-modal')">ยกเลิก</button>
+        <button class="btn btn-danger" id="confirm-delete">ลบสินค้า</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+  <div class="loading-overlay" id="loading-overlay">
+    <div class="spinner"></div>
+    <div class="loading-text">กำลังดำเนินการ...</div>
+  </div>
+
+  <script src="js/script.js"></script>
+  <script>
+    /* ── Update Stats after init ── */
+    document.addEventListener('DOMContentLoaded', () => {
+      // รอให้ initAdminPage() ทำงานก่อน แล้วค่อย update stats
+      setTimeout(() => {
+        const products = JSON.parse(localStorage.getItem('te_products') || '[]');
+        const orders   = JSON.parse(localStorage.getItem('te_orders')   || '[]');
+        document.getElementById('stat-total').textContent  = products.length;
+        document.getElementById('stat-low').textContent    = products.filter(p => p.stock > 0 && p.stock <= 5).length;
+        document.getElementById('stat-out').textContent    = products.filter(p => p.stock === 0).length;
+        document.getElementById('stat-orders').textContent = orders.length;
+      }, 100);
+    });
+  </script>
+</body>
+</html>

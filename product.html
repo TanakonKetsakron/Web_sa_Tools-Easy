@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <!--
+    PRODUCT DETAIL PAGE — product.html
+    ─────────────────────────────────────────────────
+    INPUT:   URL Parameter ?id=X
+    PROCESS: ดึง id → getProductById() → render detail
+    OUTPUT:  หน้าแสดงรายละเอียดสินค้า + ปุ่ม Add to Cart
+    ─────────────────────────────────────────────────
+  -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>รายละเอียดสินค้า — Tools Easy</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ── NAVBAR ── -->
+  <nav class="navbar">
+    <div class="container">
+      <div class="navbar__inner">
+        <a href="index.html" class="navbar__logo">
+          <div class="logo-icon">🔧</div>
+          Tools Easy
+        </a>
+        <ul class="navbar__links">
+          <li><a href="index.html">🏠 Home</a></li>
+          <li><a href="index.html#products">📦 Products</a></li>
+          <li>
+            <a href="cart.html" class="cart-badge">
+              🛒 Cart
+              <span class="badge" id="cart-count" style="display:none">0</span>
+            </a>
+          </li>
+          <li><a href="login.html" id="nav-login">🔑 Login</a></li>
+          <li><a href="#" id="nav-logout" style="display:none">🚪 Logout</a></li>
+          <li><a href="admin.html">⚙️ Admin</a></li>
+          <li><a href="orders.html">📋 Orders</a></li>
+        </ul>
+        <button class="navbar__hamburger" id="hamburger" aria-label="เมนู">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+    <div class="navbar__mobile" id="mobile-nav">
+      <a href="index.html">🏠 Home</a>
+      <a href="cart.html">🛒 Cart</a>
+      <a href="login.html">🔑 Login</a>
+    </div>
+  </nav>
+
+  <!-- ── MAIN CONTENT ── -->
+  <div class="container">
+    <!-- Breadcrumb -->
+    <div class="breadcrumb" style="margin-top:24px">
+      <a href="index.html">🏠 Home</a>
+      <span>›</span>
+      <a href="index.html#products">Products</a>
+      <span>›</span>
+      <span id="breadcrumb-name">รายละเอียดสินค้า</span>
+    </div>
+
+    <!-- Product Detail — จะถูก populate โดย JavaScript -->
+    <div id="product-detail" class="product-detail">
+      <div style="text-align:center;padding:60px;color:var(--gray-light);grid-column:1/-1">
+        กำลังโหลด...
+      </div>
+    </div>
+
+    <!-- Related / Back Section -->
+    <div style="padding:32px 0;border-top:1px solid var(--border);margin-top:40px;display:flex;gap:12px">
+      <a href="index.html" class="btn btn-outline">← กลับไปเลือกสินค้า</a>
+      <a href="cart.html" class="btn btn-primary">🛒 ดูตะกร้าสินค้า</a>
+    </div>
+  </div>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <p>&copy; 2567 <strong>Tools Easy</strong> — เครื่องมือช่างคุณภาพ</p>
+  </footer>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loading-overlay">
+    <div class="spinner"></div>
+    <div class="loading-text">กำลังโหลด...</div>
+  </div>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

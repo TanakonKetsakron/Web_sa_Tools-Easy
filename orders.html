@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <!--
+    ORDERS PAGE — orders.html
+    ─────────────────────────────────────────────────
+    INPUT:   URL ?success=ORD-XXXX (จาก checkout) หรือ
+             LocalStorage te_orders
+    PROCESS: ตรวจสอบ URL param → แสดง success view หรือ order list
+             getOrders() → render table
+    OUTPUT:  Success card with Order ID / ตาราง Order History
+    ─────────────────────────────────────────────────
+  -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>คำสั่งซื้อ — Tools Easy</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ── NAVBAR ── -->
+  <nav class="navbar">
+    <div class="container">
+      <div class="navbar__inner">
+        <a href="index.html" class="navbar__logo">
+          <div class="logo-icon">🔧</div>
+          Tools Easy
+        </a>
+        <ul class="navbar__links">
+          <li><a href="index.html">🏠 Home</a></li>
+          <li>
+            <a href="cart.html" class="cart-badge">
+              🛒 Cart
+              <span class="badge" id="cart-count" style="display:none">0</span>
+            </a>
+          </li>
+          <li><a href="login.html" id="nav-login">🔑 Login</a></li>
+          <li><a href="#" id="nav-logout" style="display:none">🚪 Logout</a></li>
+          <li><a href="admin.html">⚙️ Admin</a></li>
+          <li><a href="orders.html" class="active">📋 Orders</a></li>
+        </ul>
+        <button class="navbar__hamburger" id="hamburger" aria-label="เมนู">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+    <div class="navbar__mobile" id="mobile-nav">
+      <a href="index.html">🏠 Home</a>
+      <a href="cart.html">🛒 Cart</a>
+      <a href="orders.html" class="active">📋 Orders</a>
+    </div>
+  </nav>
+
+  <!-- ── ORDER SUCCESS VIEW ── -->
+  <!-- แสดงเมื่อมี ?success=ORD-XXXX ใน URL -->
+  <div id="success-view" style="display:none" class="success-page">
+    <div class="success-card fade-in">
+      <div class="success-icon">🎉</div>
+      <h2>สั่งซื้อสำเร็จ!</h2>
+      <p>ขอบคุณที่ไว้วางใจ Tools Easy</p>
+      <p>เราจะจัดส่งสินค้าของคุณภายใน 1-3 วันทำการ</p>
+      
+      <div class="order-id-badge" id="success-order-id">ORD-XXXX</div>
+      
+      <div style="display:flex;flex-direction:column;gap:6px;font-size:.88rem;color:var(--gray-light);margin-bottom:24px">
+        <div>💰 ยอดรวม: <strong id="success-total" style="color:var(--navy)">-</strong></div>
+        <div>📅 วันที่สั่ง: <strong id="success-date" style="color:var(--navy)">-</strong></div>
+      </div>
+
+      <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center">
+        <a href="orders.html" class="btn btn-outline">📋 ดูประวัติคำสั่งซื้อ</a>
+        <a href="index.html" class="btn btn-primary">🛒 ซื้อสินค้าต่อ</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── ORDER HISTORY VIEW ── -->
+  <!-- แสดงรายการ Order ทั้งหมด -->
+  <div id="orders-view" style="display:none">
+    <div class="page-header">
+      <div class="container">
+        <h1>📋 ประวัติคำสั่งซื้อ</h1>
+        <p>รายการคำสั่งซื้อทั้งหมดของคุณ</p>
+      </div>
+    </div>
+
+    <div class="container" style="padding-bottom:60px">
+      <div class="card" style="overflow:hidden">
+        <div style="padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+          <h2 style="font-size:1.1rem;font-weight:700;color:var(--navy)">คำสั่งซื้อทั้งหมด</h2>
+          <a href="index.html" class="btn btn-outline btn-sm">🛒 ซื้อสินค้าเพิ่ม</a>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="orders-table">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>วันที่สั่ง</th>
+                <th>จำนวนรายการ</th>
+                <th>ยอดรวม</th>
+                <th>สถานะ</th>
+              </tr>
+            </thead>
+            <tbody id="orders-tbody">
+              <tr><td colspan="5" style="text-align:center;padding:40px;color:var(--gray-light)">กำลังโหลด...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <p>&copy; 2567 <strong>Tools Easy</strong> — เครื่องมือช่างคุณภาพ</p>
+  </footer>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+  <div class="loading-overlay" id="loading-overlay">
+    <div class="spinner"></div>
+    <div class="loading-text">กำลังโหลด...</div>
+  </div>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

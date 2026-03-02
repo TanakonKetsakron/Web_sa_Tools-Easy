@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+  <!--
+    CHECKOUT PAGE — checkout.html
+    ─────────────────────────────────────────────────
+    INPUT:   Shipping address, city, phone, payment method
+    PROCESS: validate form → checkStock() → showLoading() →
+             generateOrderID() → saveOrder() → deductStock() →
+             saveCart([]) → redirect
+    OUTPUT:  Order saved ใน LocalStorage, redirect ไป orders.html?success=
+    ─────────────────────────────────────────────────
+  -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ชำระเงิน — Tools Easy</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <!-- ── NAVBAR ── -->
+  <nav class="navbar">
+    <div class="container">
+      <div class="navbar__inner">
+        <a href="index.html" class="navbar__logo">
+          <div class="logo-icon">🔧</div>
+          Tools Easy
+        </a>
+        <ul class="navbar__links">
+          <li><a href="index.html">🏠 Home</a></li>
+          <li>
+            <a href="cart.html" class="cart-badge">
+              🛒 Cart
+              <span class="badge" id="cart-count" style="display:none">0</span>
+            </a>
+          </li>
+          <li><a href="login.html" id="nav-login">🔑 Login</a></li>
+          <li><a href="#" id="nav-logout" style="display:none">🚪 Logout</a></li>
+          <li><a href="orders.html">📋 Orders</a></li>
+        </ul>
+        <button class="navbar__hamburger" id="hamburger" aria-label="เมนู">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+    <div class="navbar__mobile" id="mobile-nav">
+      <a href="index.html">🏠 Home</a>
+      <a href="cart.html">🛒 Cart</a>
+    </div>
+  </nav>
+
+  <!-- ── PAGE HEADER ── -->
+  <div class="page-header">
+    <div class="container">
+      <h1>💳 ชำระเงิน</h1>
+      <p>กรอกข้อมูลจัดส่งและเลือกวิธีชำระเงิน</p>
+    </div>
+  </div>
+
+  <!-- ── CHECKOUT CONTENT ── -->
+  <div class="container" style="padding-bottom:60px">
+
+    <!-- Step indicator -->
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:28px;font-size:.85rem;flex-wrap:wrap">
+      <span style="background:#EEF2FF;color:var(--navy);padding:4px 14px;border-radius:100px;font-weight:700">✅
+        ตะกร้าสินค้า</span>
+      <span style="color:var(--border)">›</span>
+      <span style="background:var(--navy);color:#fff;padding:4px 14px;border-radius:100px;font-weight:700">💳
+        ชำระเงิน</span>
+      <span style="color:var(--border)">›</span>
+      <span style="color:var(--gray-light);padding:4px 14px;border-radius:100px;border:1.5px solid var(--border)">🎉
+        ยืนยัน</span>
+    </div>
+
+    <div class="checkout-layout">
+      <!-- Form -->
+      <div>
+        <form id="checkout-form">
+          <!-- Shipping Info -->
+          <div class="checkout-form" style="margin-bottom:20px">
+            <div class="checkout-section-title">📍 ที่อยู่จัดส่ง</div>
+            <div style="display:flex;flex-direction:column;gap:16px">
+              <div class="form-group">
+                <label class="form-label" for="shipping-address">ที่อยู่ (บ้านเลขที่, ถนน, แขวง/ตำบล)</label>
+                <textarea id="shipping-address" class="form-control" rows="2"
+                  placeholder="เช่น 123/4 ถ.สุขุมวิท แขวงคลองเตย เขตคลองเตย"></textarea>
+                <span class="form-error" id="shipping-address-error"></span>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="shipping-city">จังหวัด</label>
+                  <select id="shipping-city" class="form-control">
+                    <option value="">-- เลือกจังหวัด --</option>
+                    <option value="กรุงเทพมหานคร">กรุงเทพมหานคร</option>
+                    <option value="เชียงใหม่">เชียงใหม่</option>
+                    <option value="ภูเก็ต">ภูเก็ต</option>
+                    <option value="ขอนแก่น">ขอนแก่น</option>
+                    <option value="นครราชสีมา">นครราชสีมา</option>
+                    <option value="อื่นๆ">อื่นๆ</option>
+                  </select>
+                  <span class="form-error" id="shipping-city-error"></span>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="shipping-phone">เบอร์โทรศัพท์</label>
+                  <input type="tel" id="shipping-phone" class="form-control" placeholder="เช่น 081-234-5678">
+                  <span class="form-error" id="shipping-phone-error"></span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="shipping-note">หมายเหตุ (ถ้ามี)</label>
+                <input type="text" id="shipping-note" class="form-control"
+                  placeholder="เช่น โทรก่อนส่ง / วางหน้าประตูได้">
+              </div>
+            </div>
+          </div>
+
+          <!-- Payment Method -->
+          <div class="checkout-form">
+            <div class="checkout-section-title">💳 วิธีชำระเงิน</div>
+            <div class="payment-options">
+              <label class="payment-option">
+                <input type="radio" name="payment" value="cod" checked>
+                <div class="payment-option__icon">💵</div>
+                <div>
+                  <div class="payment-option__label">COD</div>
+                  <div class="payment-option__sub">ชำระปลายทาง</div>
+                </div>
+              </label>
+              <label class="payment-option">
+                <input type="radio" name="payment" value="credit">
+                <div class="payment-option__icon">💳</div>
+                <div>
+                  <div class="payment-option__label">Credit Card</div>
+                  <div class="payment-option__sub">บัตรเครดิต/เดบิต</div>
+                </div>
+              </label>
+              <label class="payment-option">
+                <input type="radio" name="payment" value="transfer">
+                <div class="payment-option__icon">🏦</div>
+                <div>
+                  <div class="payment-option__label">โอนเงิน</div>
+                  <div class="payment-option__sub">ธนาคาร</div>
+                </div>
+              </label>
+              <label class="payment-option">
+                <input type="radio" name="payment" value="promptpay">
+                <div class="payment-option__icon">📱</div>
+                <div>
+                  <div class="payment-option__label">PromptPay</div>
+                  <div class="payment-option__sub">พร้อมเพย์</div>
+                </div>
+              </label>
+            </div>
+
+            <div style="margin-top:24px">
+              <button type="submit" class="btn btn-primary btn-lg btn-block">
+                🛍️ ยืนยันคำสั่งซื้อ
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Order Review -->
+      <div>
+        <div class="order-summary" style="position:sticky;top:80px">
+          <div class="order-summary__title">📦 สรุปรายการสินค้า</div>
+          <div class="checkout-items" id="checkout-items">
+            <!-- จะถูก render โดย JavaScript -->
+          </div>
+          <hr class="divider">
+          <div class="summary-row">
+            <span>ค่าจัดส่ง</span>
+            <span style="color:var(--success);font-weight:600">ฟรี</span>
+          </div>
+          <div class="summary-total">
+            <span>ยอดรวม</span>
+            <span id="co-total">฿0</span>
+          </div>
+          <div style="margin-top:14px;font-size:.78rem;color:var(--gray-light);text-align:center">
+            🔒 ข้อมูลของคุณปลอดภัย 100%
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <p>&copy; 2567 <strong>Tools Easy</strong> — เครื่องมือช่างคุณภาพ</p>
+  </footer>
+
+  <!-- ── MODALS ── -->
+  <!-- Stock Error Modal -->
+  <div class="modal-overlay" id="stock-error-modal">
+    <div class="modal">
+      <div class="modal__header">
+        <div class="modal__title">⚠️ สต็อกสินค้าไม่เพียงพอ</div>
+        <button class="modal__close">✕</button>
+      </div>
+      <div class="modal__body">
+        <p style="margin-bottom:12px">ไม่สามารถดำเนินการสั่งซื้อได้ เนื่องจาก:</p>
+        <ul id="stock-errors"
+          style="list-style:disc;padding-left:20px;color:var(--danger);font-size:.88rem;line-height:2"></ul>
+        <p style="margin-top:12px">กรุณาปรับจำนวนสินค้าในตะกร้าและลองใหม่อีกครั้ง</p>
+      </div>
+      <div class="modal__footer">
+        <a href="cart.html" class="btn btn-outline">ไปที่ตะกร้า</a>
+        <button class="btn btn-primary" onclick="closeModal('stock-error-modal')">ปิด</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loading-overlay">
+    <div class="spinner"></div>
+    <div class="loading-text">กำลังบันทึกคำสั่งซื้อ...</div>
+  </div>
+
+  <script src="js/script.js"></script>
+</body>
+
+</html>

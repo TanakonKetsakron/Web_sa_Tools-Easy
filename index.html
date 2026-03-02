@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <!--
+    HOME PAGE — index.html
+    INPUT:   Trade card click, Category filter, Search keyword, page load
+    PROCESS: โหลด products/trades → filter by trade/category/keyword → render
+    OUTPUT:  Trade selector + Category filter + Product card grid
+  -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tools Easy — เครื่องมือช่างตามสายงาน</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="container">
+      <div class="navbar__inner">
+        <a href="index.html" class="navbar__logo">
+          <div class="logo-icon">🔧</div>
+          Tools Easy
+        </a>
+        <ul class="navbar__links">
+          <li><a href="index.html" class="active">🏠 Home</a></li>
+          <li><a href="#products">📦 Products</a></li>
+          <li>
+            <a href="cart.html" class="cart-badge">
+              🛒 Cart
+              <span class="badge" id="cart-count" style="display:none">0</span>
+            </a>
+          </li>
+          <li><a href="login.html" id="nav-login">🔑 Login</a></li>
+          <li><a href="#" id="nav-logout" style="display:none">🚪 Logout</a></li>
+          <li><a href="admin.html">⚙️ Admin</a></li>
+          <li><a href="orders.html">📋 Orders</a></li>
+        </ul>
+        <button class="navbar__hamburger" id="hamburger" aria-label="เมนู">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+    <div class="navbar__mobile" id="mobile-nav">
+      <a href="index.html">🏠 Home</a>
+      <a href="cart.html">🛒 Cart</a>
+      <a href="login.html">🔑 Login</a>
+      <a href="admin.html">⚙️ Admin</a>
+      <a href="orders.html">📋 Orders</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero__content">
+        <div class="hero__badge">🔩 เครื่องมือช่างครบทุกสายงาน</div>
+        <h1>ค้นหาเครื่องมือ<br>ตามสายงานช่าง</h1>
+        <p>เลือกสายงานของคุณ แล้วเราจะแนะนำเครื่องมือที่เหมาะสมจาก Stanley, Bosch, Makita, Fluke และอีกมากมาย</p>
+        <div class="hero__actions">
+          <a href="#trade-section" class="btn btn-accent btn-lg">🔍 เลือกตามสายงาน</a>
+          <a href="register.html" class="btn btn-outline btn-lg" style="border-color:rgba(255,255,255,0.5);color:#fff">สมัครสมาชิก</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURE BAR -->
+  <div style="background:#fff;border-bottom:1px solid var(--border);padding:14px 0">
+    <div class="container">
+      <div style="display:flex;gap:28px;flex-wrap:wrap;justify-content:center">
+        <span style="display:flex;align-items:center;gap:8px;font-size:.83rem;font-weight:600;color:var(--navy)">🚚 ส่งฟรีทั่วประเทศ</span>
+        <span style="display:flex;align-items:center;gap:8px;font-size:.83rem;font-weight:600;color:var(--navy)">✅ สินค้าของแท้ 100%</span>
+        <span style="display:flex;align-items:center;gap:8px;font-size:.83rem;font-weight:600;color:var(--navy)">🔄 คืนสินค้าได้ใน 30 วัน</span>
+        <span style="display:flex;align-items:center;gap:8px;font-size:.83rem;font-weight:600;color:var(--navy)">🛡️ รับประกันสินค้าทุกชิ้น</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRADE SECTION -->
+  <section class="trades-section" id="trade-section">
+    <div class="container">
+      <div class="section__header">
+        <div>
+          <h2 class="section__title">🏆 เลือกตามสายงานช่าง</h2>
+          <p class="section__sub">คลิกที่สายงานของคุณ เพื่อดูเครื่องมือที่เหมาะสม</p>
+        </div>
+        <a href="#products" class="btn btn-outline btn-sm">ดูสินค้าทั้งหมด</a>
+      </div>
+      <div class="trades-grid" id="trade-cards">
+        <div style="grid-column:1/-1;text-align:center;padding:20px;color:var(--gray-light)">กำลังโหลด...</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCTS SECTION -->
+  <section class="section" id="products">
+    <div class="container">
+      <div class="section__header">
+        <div>
+          <h2 class="section__title" id="products-title">สินค้าทั้งหมด</h2>
+          <p class="section__sub"><span id="product-count">-</span> รายการ</p>
+        </div>
+        <div class="search-box">
+          <span class="search-box__icon">🔍</span>
+          <input type="text" id="product-search" placeholder="ค้นหาสินค้า, แบรนด์...">
+        </div>
+      </div>
+      <div class="filter-bar" id="filter-bar"></div>
+      <div class="product-grid" id="product-grid">
+        <div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--gray-light)">กำลังโหลดสินค้า...</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY SECTION -->
+  <section style="background:var(--navy);padding:52px 0">
+    <div class="container">
+      <h2 style="color:#fff;text-align:center;font-size:1.7rem;margin-bottom:32px">ทำไมต้อง Tools Easy?</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px">
+        <div style="text-align:center;padding:20px"><div style="font-size:2.2rem;margin-bottom:10px">🎯</div><h3 style="color:#fff;font-size:.95rem;margin-bottom:6px">จัดหมวดตามสายงาน</h3><p style="color:rgba(255,255,255,.65);font-size:.82rem">8 สายงานช่าง หาง่าย ตรงความต้องการ</p></div>
+        <div style="text-align:center;padding:20px"><div style="font-size:2.2rem;margin-bottom:10px">🏆</div><h3 style="color:#fff;font-size:.95rem;margin-bottom:6px">แบรนด์ชั้นนำโลก</h3><p style="color:rgba(255,255,255,.65);font-size:.82rem">Bosch, Makita, Fluke, Lincoln และอีกมากมาย</p></div>
+        <div style="text-align:center;padding:20px"><div style="font-size:2.2rem;margin-bottom:10px">💰</div><h3 style="color:#fff;font-size:.95rem;margin-bottom:6px">ราคายุติธรรม</h3><p style="color:rgba(255,255,255,.65);font-size:.82rem">ราคาตรง ของแท้ รับประกัน</p></div>
+        <div style="text-align:center;padding:20px"><div style="font-size:2.2rem;margin-bottom:10px">🚀</div><h3 style="color:#fff;font-size:.95rem;margin-bottom:6px">ส่งไวทั่วประเทศ</h3><p style="color:rgba(255,255,255,.65);font-size:.82rem">1-3 วันทำการ ฟรีทุกออเดอร์</p></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2567 <strong>Tools Easy</strong> — เครื่องมือช่างครบทุกสายงาน | ช่างเครื่องยนต์ · ช่างไฟฟ้า · ช่างประปา · ช่างเชื่อม · ช่างไม้ · ช่างแอร์ · ช่างก่อสร้าง · ช่างทาสี</p>
+  </footer>
+
+  <div class="toast-container" id="toast-container"></div>
+  <div class="loading-overlay" id="loading-overlay">
+    <div class="spinner"></div>
+    <div class="loading-text">กำลังโหลด...</div>
+  </div>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
