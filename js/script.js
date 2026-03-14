@@ -318,6 +318,16 @@ function lsGet(key, fallback = null) {
   }
 }
 
+/** Escape HTML สำหรับข้อมูลที่มาจากผู้ใช้ก่อนใส่ลง template string */
+function escapeHTML(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 /* ============================================================
    3. PRODUCT MANAGEMENT
    ============================================================ */
@@ -556,6 +566,40 @@ function registerUser({ name, email, password }) {
   return { ok: true, message: 'ลงทะเบียนสำเร็จ' };
 }
 
+/** เตรียมบัญชีเริ่มต้นสำหรับเดโม: ลูกค้า + แอดมิน */
+function ensureDefaultUsers() {
+  const users = getUsers();
+  let changed = false;
+
+  if (!users.find(u => u.email === 'demo@toolseasy.th')) {
+    users.push({
+      id: Date.now(),
+      name: 'Demo User',
+      email: 'demo@toolseasy.th',
+      password: btoa('demo1234'),
+      createdAt: new Date().toISOString(),
+      role: 'customer'
+    });
+    changed = true;
+  }
+
+  if (!users.find(u => u.email === 'admin@toolseasy.th')) {
+    users.push({
+      id: Date.now() + 1,
+      name: 'Tools Easy Admin',
+      email: 'admin@toolseasy.th',
+      password: btoa('admin1234'),
+      createdAt: new Date().toISOString(),
+      role: 'admin'
+    });
+    changed = true;
+  }
+
+  if (changed) {
+    lsSet('te_users', users);
+  }
+}
+
 /** เข้าสู่ระบบ
     Input:  { email, password }
     Process: ค้นหา email → ตรวจสอบ password
@@ -573,6 +617,10 @@ function loginUser({ email, password }) {
 /** ดึง Session ปัจจุบัน */
 function getSession() {
   return lsGet('te_session');
+}
+
+function isAdminSession(session = getSession()) {
+  return !!session && session.role === 'admin';
 }
 
 /** ออกจากระบบ */
@@ -688,8 +736,8 @@ function showToast(type = 'info', title = '', message = '') {
   toast.innerHTML = `
     <div class="toast-icon">${TOAST_ICONS[type] || 'ℹ️'}</div>
     <div class="toast-content">
-      <div class="toast-title">${title}</div>
-      ${message ? `<div class="toast-msg">${message}</div>` : ''}
+      <div class="toast-title">${escapeHTML(title)}</div>
+      ${message ? `<div class="toast-msg">${escapeHTML(message)}</div>` : ''}
     </div>
   `;
   container.appendChild(toast);
@@ -773,12 +821,20 @@ function initNavbar() {
   const session = getSession();
   const loginLink = document.getElementById('nav-login');
   const logoutBtn = document.getElementById('nav-logout');
+  const adminLinks = document.querySelectorAll('a[href="admin.html"]');
   if (session) {
     if (loginLink) loginLink.style.display = 'none';
     if (logoutBtn) { logoutBtn.style.display = 'flex'; }
   } else {
     if (logoutBtn) logoutBtn.style.display = 'none';
   }
+
+  adminLinks.forEach(link => {
+    const canSee = isAdminSession(session);
+    const li = link.closest('li');
+    if (li) li.style.display = canSee ? '' : 'none';
+    else link.style.display = canSee ? '' : 'none';
+  });
 
   // Logout button
   if (logoutBtn) {
@@ -815,6 +871,7 @@ function formatDate(isoString) {
    14. PAGE ROUTER — เรียกฟังก์ชันตาม URL
    ============================================================ */
 document.addEventListener('DOMContentLoaded', () => {
+  ensureDefaultUsers();
   initNavbar();
 
   const page = window.location.pathname.split('/').pop() || 'index.html';
@@ -846,8 +903,10 @@ function initHomePage() {
   const grid = document.getElementById('product-grid');
   if (!grid) return;
 
+  const CATEGORY_VISIBLE_COUNT = 14;
   let currentTrade    = 'all';   // trade ID ที่เลือก
   let currentCategory = 'all';   // category filter
+  let categoryExpanded = false;
 
   // ─ Render Trade Cards ─
   renderTradeCards();
@@ -862,7 +921,8 @@ function initHomePage() {
       card.classList.add('active');
       currentTrade    = card.dataset.trade;
       currentCategory = 'all';
-      renderCategoryFilter(currentTrade);
+      categoryExpanded = false;
+      renderCategoryFilter(currentTrade, categoryExpanded, currentCategory, CATEGORY_VISIBLE_COUNT);
       renderProductGrid(currentTrade, 'all');
       // Scroll ไปหน้า product
       document.getElementById('products')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -873,11 +933,17 @@ function initHomePage() {
   const filterBar = document.getElementById('filter-bar');
   if (filterBar) {
     filterBar.addEventListener('click', (e) => {
+      const toggleBtn = e.target.closest('[data-action="toggle-categories"]');
+      if (toggleBtn) {
+        categoryExpanded = !categoryExpanded;
+        renderCategoryFilter(currentTrade, categoryExpanded, currentCategory, CATEGORY_VISIBLE_COUNT);
+        return;
+      }
+
       const btn = e.target.closest('.filter-btn');
       if (!btn) return;
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
       currentCategory = btn.dataset.cat;
+      renderCategoryFilter(currentTrade, categoryExpanded, currentCategory, CATEGORY_VISIBLE_COUNT);
       renderProductGrid(currentTrade, currentCategory);
     });
   }
@@ -891,7 +957,7 @@ function initHomePage() {
   }
 
   // Initial render
-  renderCategoryFilter('all');
+  renderCategoryFilter('all', categoryExpanded, currentCategory, CATEGORY_VISIBLE_COUNT);
   renderProductGrid('all', 'all');
 }
 
@@ -910,7 +976,7 @@ function renderTradeCards() {
 }
 
 /** สร้าง Category filter ตาม trade ที่เลือก */
-function renderCategoryFilter(tradeId) {
+function renderCategoryFilter(tradeId, expanded = false, activeCategory = 'all', visibleCount = 14) {
   const filterBar = document.getElementById('filter-bar');
   if (!filterBar) return;
 
@@ -920,11 +986,28 @@ function renderCategoryFilter(tradeId) {
     : products.filter(p => p.trades && p.trades.includes(tradeId));
 
   const categories = ['all', ...new Set(tradeProducts.map(p => p.category))];
-  filterBar.innerHTML = categories.map(cat => `
-    <button class="filter-btn ${cat === 'all' ? 'active' : ''}" data-cat="${cat}">
-      ${cat === 'all' ? '🔹 ทั้งหมด' : cat}
+  let visibleCategories = expanded ? categories : categories.slice(0, visibleCount);
+
+  if (!expanded && activeCategory !== 'all' && !visibleCategories.includes(activeCategory) && categories.includes(activeCategory)) {
+    visibleCategories = [...visibleCategories, activeCategory];
+  }
+
+  const categoryButtons = visibleCategories.map(cat => `
+    <button class="filter-btn ${cat === 'all' ? 'active' : ''}" data-cat="${escapeHTML(cat)}">
+      ${cat === 'all' ? '🔹 ทั้งหมด' : escapeHTML(cat)}
     </button>
   `).join('');
+
+  const toggleButton = categories.length > visibleCount
+    ? `<button class="filter-toggle" data-action="toggle-categories">${expanded ? '▲ แสดงน้อยลง' : '▼ ดูหมวดหมู่เพิ่มเติม'}</button>`
+    : '';
+
+  filterBar.innerHTML = categoryButtons + toggleButton;
+
+  // Sync active state with current category
+  filterBar.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.cat === activeCategory);
+  });
 }
 
 /** วาด Product Card Grid
@@ -989,8 +1072,8 @@ function createProductCard(p) {
     <div class="card product-card fade-in">
       <div class="product-card__img-placeholder">${p.emoji || '🔧'}</div>
       <div class="product-card__body">
-        <div class="product-card__category">${p.category}</div>
-        <div class="product-card__name">${p.name}</div>
+        <div class="product-card__category">${escapeHTML(p.category)}</div>
+        <div class="product-card__name">${escapeHTML(p.name)}</div>
         ${tradeTags ? `<div class="trade-tags">${tradeTags}</div>` : ''}
         <div class="product-card__price">
           ${formatCurrency(p.price)}
@@ -1040,19 +1123,19 @@ function initProductPage() {
   container.innerHTML = `
     <div class="product-detail__gallery">${product.emoji || '🔧'}</div>
     <div class="product-detail__info">
-      <div class="product-detail__category">${product.category}</div>
-      <h1 class="product-detail__name">${product.name}</h1>
+      <div class="product-detail__category">${escapeHTML(product.category)}</div>
+      <h1 class="product-detail__name">${escapeHTML(product.name)}</h1>
       ${tradeTags ? `<div class="trade-tags" style="margin:4px 0">${tradeTags}</div>` : ''}
       <div class="product-detail__price">
         ${formatCurrency(product.price)}
         ${product.originalPrice ? `<span class="original">${formatCurrency(product.originalPrice)}</span>` : ''}
       </div>
-      <p class="product-detail__desc">${product.description || ''}</p>
+      <p class="product-detail__desc">${escapeHTML(product.description || '')}</p>
       
       <div class="product-detail__meta">
-        <div class="meta-row"><span class="meta-label">แบรนด์</span><span class="meta-value">${product.brand || '-'}</span></div>
-        <div class="meta-row"><span class="meta-label">การรับประกัน</span><span class="meta-value">${product.warranty || '-'}</span></div>
-        <div class="meta-row"><span class="meta-label">น้ำหนัก</span><span class="meta-value">${product.weight || '-'}</span></div>
+        <div class="meta-row"><span class="meta-label">แบรนด์</span><span class="meta-value">${escapeHTML(product.brand || '-')}</span></div>
+        <div class="meta-row"><span class="meta-label">การรับประกัน</span><span class="meta-value">${escapeHTML(product.warranty || '-')}</span></div>
+        <div class="meta-row"><span class="meta-label">น้ำหนัก</span><span class="meta-value">${escapeHTML(product.weight || '-')}</span></div>
         <div class="meta-row"><span class="meta-label">สต็อก</span>
           <span class="meta-value ${product.stock <= 5 ? 'product-card__stock low' : ''}">
             ${product.stock > 0 ? `✅ ${product.stock} ชิ้น` : '❌ สินค้าหมด'}
@@ -1105,6 +1188,38 @@ function initProductPage() {
    Output:  Cart table + Order summary
    ============================================================ */
 function initCartPage() {
+  const cartContainer = document.getElementById('cart-container');
+  if (cartContainer) {
+    cartContainer.addEventListener('click', handleCartAction);
+  }
+  renderCart();
+}
+
+function handleCartAction(e) {
+  const target = e.target.closest('[data-action]');
+  if (!target) return;
+
+  const action = target.dataset.action;
+  const id = Number(target.dataset.id);
+  if (!action || !id) return;
+
+  if (action === 'minus') {
+    const item = getCart().find(i => i.productId === id);
+    if (item) updateCartQty(id, item.quantity - 1);
+  } else if (action === 'plus') {
+    const item = getCart().find(i => i.productId === id);
+    const product = getProductById(id);
+    if (item && product && item.quantity < product.stock) {
+      updateCartQty(id, item.quantity + 1);
+    } else {
+      showToast('warning', 'สต็อกไม่พอ', `มีสินค้าเพียง ${getProductById(id)?.stock} ชิ้น`);
+      return;
+    }
+  } else if (action === 'remove') {
+    removeFromCart(id);
+    showToast('info', 'ลบสินค้าออกแล้ว', '');
+  }
+
   renderCart();
 }
 
@@ -1160,31 +1275,6 @@ function renderCart() {
           </div>`;
       }).join('')}
     </div>`;
-
-  // Event delegation สำหรับ qty + remove
-  cartContainer.addEventListener('click', (e) => {
-    const action = e.target.dataset.action;
-    const id = Number(e.target.dataset.id);
-    if (!action || !id) return;
-
-    if (action === 'minus') {
-      const item = getCart().find(i => i.productId === id);
-      if (item) updateCartQty(id, item.quantity - 1);
-    } else if (action === 'plus') {
-      const item = getCart().find(i => i.productId === id);
-      const product = getProductById(id);
-      if (item && product && item.quantity < product.stock) {
-        updateCartQty(id, item.quantity + 1);
-      } else {
-        showToast('warning', 'สต็อกไม่พอ', `มีสินค้าเพียง ${getProductById(id)?.stock} ชิ้น`);
-        return;
-      }
-    } else if (action === 'remove') {
-      removeFromCart(id);
-      showToast('info', 'ลบสินค้าออกแล้ว', '');
-    }
-    renderCart();
-  });
 
   // คำนวณราคารวม
   const total = calculateTotal();
@@ -1248,7 +1338,10 @@ function initCheckoutPage() {
     const stockCheck = checkStock();
     if (!stockCheck.ok) {
       openModal('stock-error-modal');
-      document.getElementById('stock-errors').innerHTML = stockCheck.errors.map(e => `<li>${e}</li>`).join('');
+      const stockErrors = document.getElementById('stock-errors');
+      if (stockErrors) {
+        stockErrors.innerHTML = stockCheck.errors.map(err => `<li>${escapeHTML(err)}</li>`).join('');
+      }
       return;
     }
 
@@ -1270,6 +1363,8 @@ function initCheckoutPage() {
       items: orderItems,
       total: calculateTotal(),
       shipping: { address, city, phone },
+      userId: getSession()?.id || null,
+      userEmail: getSession()?.email || null,
       payment,
       status: 'success',
       createdAt: new Date().toISOString()
@@ -1366,10 +1461,7 @@ function initRegisterPage() {
   if (!form) return;
 
   // Auto-create demo user ถ้ายังไม่มี
-  const users = getUsers();
-  if (!users.find(u => u.email === 'demo@toolseasy.th')) {
-    registerUser({ name: 'Demo User', email: 'demo@toolseasy.th', password: 'demo1234' });
-  }
+  ensureDefaultUsers();
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -1399,8 +1491,12 @@ function initRegisterPage() {
    Output:  Updated product list, Toast notifications
    ============================================================ */
 function initAdminPage() {
-  // ตรวจสอบ Admin session (ใน Production ต้องตรวจ role)
-  // ตอนนี้ข้ามไปได้เพื่อ Demo
+  const session = getSession();
+  if (!isAdminSession(session)) {
+    showToast('warning', 'ไม่มีสิทธิ์เข้าถึงหน้านี้', 'กรุณาเข้าสู่ระบบด้วยบัญชีผู้ดูแลระบบ');
+    setTimeout(() => { window.location.href = 'login.html'; }, 900);
+    return;
+  }
 
   renderAdminTable();
 
@@ -1423,7 +1519,9 @@ function initAdminPage() {
       warranty:      document.getElementById('p-warranty').value.trim(),
     };
 
-    if (!data.name || !data.category || !data.price || !data.stock) {
+    const invalidPrice = !Number.isFinite(data.price) || data.price <= 0;
+    const invalidStock = !Number.isFinite(data.stock) || data.stock < 0;
+    if (!data.name || !data.category || invalidPrice || invalidStock) {
       showToast('warning', 'กรอกข้อมูลไม่ครบ', 'กรุณากรอกข้อมูลที่จำเป็น');
       return;
     }
@@ -1498,7 +1596,7 @@ function renderAdminTable() {
   tbody.innerHTML = products.map(p => `
     <tr>
       <td><div class="product-thumb">${p.emoji || '🔧'}</div></td>
-      <td><strong>${p.name}</strong><br><small style="color:var(--gray-light)">${p.category}</small></td>
+      <td><strong>${escapeHTML(p.name)}</strong><br><small style="color:var(--gray-light)">${escapeHTML(p.category)}</small></td>
       <td>${formatCurrency(p.price)}</td>
       <td>
         <span class="${p.stock === 0 ? 'status-failed' : p.stock <= 5 ? 'status-pending' : 'status-success'} order-status">
@@ -1536,7 +1634,7 @@ function initOrdersPage() {
     document.getElementById('success-order-id').textContent = successId;
 
     // หา order data
-    const order = getOrders().find(o => o.id === successId);
+    const order = getVisibleOrders().find(o => o.id === successId);
     if (order) {
       document.getElementById('success-total').textContent = formatCurrency(order.total);
       document.getElementById('success-date').textContent = formatDate(order.createdAt);
@@ -1552,7 +1650,7 @@ function renderOrdersTable() {
   const tbody = document.getElementById('orders-tbody');
   if (!tbody) return;
 
-  const orders = getOrders();
+  const orders = getVisibleOrders();
   if (orders.length === 0) {
     tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--gray-light)">ยังไม่มีประวัติคำสั่งซื้อ</td></tr>`;
     return;
@@ -1571,4 +1669,14 @@ function renderOrdersTable() {
       </td>
     </tr>
   `).join('');
+}
+
+function getVisibleOrders() {
+  const session = getSession();
+  const orders = getOrders();
+
+  if (isAdminSession(session)) return orders;
+  if (!session) return [];
+
+  return orders.filter(o => o.userId === session.id || o.userEmail === session.email);
 }

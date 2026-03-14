@@ -11,7 +11,7 @@
    ============================================================ */
 
 /* ── Google Fonts ── */
-@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600;700&display=swap');
 
 /* ── CSS Variables ── */
 :root {
@@ -43,7 +43,7 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Mitr', sans-serif;
   background: var(--bg);
   color: var(--gray);
   min-height: 100vh;
@@ -55,7 +55,7 @@ ul { list-style: none; }
 
 /* ── Typography ── */
 h1, h2, h3, h4 {
-  font-family: 'Barlow', sans-serif;
+  font-family: 'Mitr', sans-serif;
   color: var(--navy);
   line-height: 1.2;
 }
@@ -84,7 +84,7 @@ h1, h2, h3, h4 {
   height: 64px;
 }
 .navbar__logo {
-  font-family: 'Barlow', sans-serif;
+  font-family: 'Mitr', sans-serif;
   font-weight: 800;
   font-size: 1.4rem;
   color: var(--white);
@@ -175,7 +175,7 @@ h1, h2, h3, h4 {
   gap: 8px;
   padding: 10px 22px;
   border-radius: var(--radius);
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Mitr', sans-serif;
   font-weight: 600;
   font-size: 0.92rem;
   border: none;
@@ -621,6 +621,24 @@ h1, h2, h3, h4 {
 .filter-btn:hover, .filter-btn.active {
   border-color: var(--navy);
   background: var(--navy);
+  color: var(--white);
+}
+
+.filter-toggle {
+  padding: 7px 16px;
+  border: 1.5px dashed var(--navy-light);
+  border-radius: 100px;
+  background: #EFF6FF;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition);
+  color: var(--navy);
+}
+
+.filter-toggle:hover {
+  background: var(--navy);
+  border-style: solid;
   color: var(--white);
 }
 

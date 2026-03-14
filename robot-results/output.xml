@@ -1,0 +1,819 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.4.2 (Python 3.12.6 on win32)" generated="2026-03-14T15:18:23.150032" rpa="false" schemaversion="5">
+<suite id="s1" name="E2E" source="c:\Users\User\Desktop\tools-easy\tests\e2e.robot">
+<kw name="Open App In Headless Chrome" type="SETUP">
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:23.341402" level="INFO">Opening browser 'Chrome' to base url 'http://127.0.0.1:5500/index.html'.</msg>
+<arg>${BASE_URL}</arg>
+<arg>Chrome</arg>
+<arg>options=add_argument("--headless=new");add_argument("--disable-gpu");add_argument("--window-size=1440,900")</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2026-03-14T15:18:23.341402" elapsed="1.350914"/>
+</kw>
+<kw name="Go To" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:24.692316" level="INFO">Opening url 'http://127.0.0.1:5500/index.html'</msg>
+<arg>${BASE_URL}</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<status status="PASS" start="2026-03-14T15:18:24.692316" elapsed="0.095977"/>
+</kw>
+<kw name="Wait Until Page Contains" owner="SeleniumLibrary">
+<arg>Tools Easy</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="PASS" start="2026-03-14T15:18:24.789479" elapsed="0.015651"/>
+</kw>
+<status status="PASS" start="2026-03-14T15:18:23.341402" elapsed="1.463728"/>
+</kw>
+<test id="s1-t1" name="Home Page Loads And Shows Products" line="15">
+<kw name="Reset App State">
+<kw name="Execute Javascript" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:24.807353" level="INFO">Executing JavaScript:
+window.localStorage.removeItem('te_cart');
+Without any arguments.</msg>
+<arg>window.localStorage.removeItem('te_cart');</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<status status="PASS" start="2026-03-14T15:18:24.806297" elapsed="0.010526"/>
+</kw>
+<kw name="Execute Javascript" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:24.816823" level="INFO">Executing JavaScript:
+window.localStorage.removeItem('te_orders');
+Without any arguments.</msg>
+<arg>window.localStorage.removeItem('te_orders');</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<status status="PASS" start="2026-03-14T15:18:24.816823" elapsed="0.007685"/>
+</kw>
+<kw name="Execute Javascript" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:24.825517" level="INFO">Executing JavaScript:
+window.localStorage.removeItem('te_session');
+Without any arguments.</msg>
+<arg>window.localStorage.removeItem('te_session');</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<status status="PASS" start="2026-03-14T15:18:24.824508" elapsed="0.007214"/>
+</kw>
+<kw name="Execute Javascript" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:24.831722" level="INFO">Executing JavaScript:
+window.localStorage.removeItem('te_products');
+Without any arguments.</msg>
+<arg>window.localStorage.removeItem('te_products');</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<status status="PASS" start="2026-03-14T15:18:24.831722" elapsed="0.005913"/>
+</kw>
+<kw name="Go To" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:24.838720" level="INFO">Opening url 'http://127.0.0.1:5500/index.html'</msg>
+<arg>${BASE_URL}</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<status status="PASS" start="2026-03-14T15:18:24.838720" elapsed="0.080057"/>
+</kw>
+<kw name="Wait Until Page Contains" owner="SeleniumLibrary">
+<arg>Tools Easy</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="PASS" start="2026-03-14T15:18:24.918777" elapsed="0.016052"/>
+</kw>
+<status status="PASS" start="2026-03-14T15:18:24.806297" elapsed="0.128532"/>
+</kw>
+<kw name="Go To" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:24.935919" level="INFO">Opening url 'http://127.0.0.1:5500/index.html'</msg>
+<arg>${BASE_URL}</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<status status="PASS" start="2026-03-14T15:18:24.934829" elapsed="0.080679"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>css:#product-grid</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-14T15:18:25.015508" elapsed="0.028438"/>
+</kw>
+<kw name="Wait Until Keyword Succeeds" owner="BuiltIn">
+<kw name="Element Should Be Visible" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:25.067465" level="INFO">Element 'css:.product-card' is displayed.</msg>
+<arg>css:.product-card</arg>
+<doc>Verifies that the element identified by ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-14T15:18:25.044498" elapsed="0.022967"/>
+</kw>
+<arg>15x</arg>
+<arg>1s</arg>
+<arg>Element Should Be Visible</arg>
+<arg>css:.product-card</arg>
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<status status="PASS" start="2026-03-14T15:18:25.043946" elapsed="0.023519"/>
+</kw>
+<kw name="Get Element Count" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:25.084886" level="INFO">${count} = 160</msg>
+<var>${count}</var>
+<arg>css:.product-card</arg>
+<doc>Returns the number of elements matching ``locator``.</doc>
+<status status="PASS" start="2026-03-14T15:18:25.067465" elapsed="0.017421"/>
+</kw>
+<kw name="Should Be True" owner="BuiltIn">
+<arg>${count} &gt; 0</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="PASS" start="2026-03-14T15:18:25.085886" elapsed="0.000000"/>
+</kw>
+<status status="PASS" start="2026-03-14T15:18:24.805130" elapsed="0.280756"/>
+</test>
+<test id="s1-t2" name="Category Filter Can Expand And Collapse" line="23">
+<kw name="Reset App State">
+<kw name="Execute Javascript" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:25.086887" level="INFO">Executing JavaScript:
+window.localStorage.removeItem('te_cart');
+Without any arguments.</msg>
+<arg>window.localStorage.removeItem('te_cart');</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<status status="PASS" start="2026-03-14T15:18:25.086887" elapsed="0.011673"/>
+</kw>
+<kw name="Execute Javascript" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:25.099563" level="INFO">Executing JavaScript:
+window.localStorage.removeItem('te_orders');
+Without any arguments.</msg>
+<arg>window.localStorage.removeItem('te_orders');</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<status status="PASS" start="2026-03-14T15:18:25.099563" elapsed="0.006591"/>
+</kw>
+<kw name="Execute Javascript" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:25.107169" level="INFO">Executing JavaScript:
+window.localStorage.removeItem('te_session');
+Without any arguments.</msg>
+<arg>window.localStorage.removeItem('te_session');</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<status status="PASS" start="2026-03-14T15:18:25.107169" elapsed="0.009003"/>
+</kw>
+<kw name="Execute Javascript" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:25.116172" level="INFO">Executing JavaScript:
+window.localStorage.removeItem('te_products');
+Without any arguments.</msg>
+<arg>window.localStorage.removeItem('te_products');</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<status status="PASS" start="2026-03-14T15:18:25.116172" elapsed="0.005781"/>
+</kw>
+<kw name="Go To" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:25.121953" level="INFO">Opening url 'http://127.0.0.1:5500/index.html'</msg>
+<arg>${BASE_URL}</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<status status="PASS" start="2026-03-14T15:18:25.121953" elapsed="0.084636"/>
+</kw>
+<kw name="Wait Until Page Contains" owner="SeleniumLibrary">
+<arg>Tools Easy</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="PASS" start="2026-03-14T15:18:25.206589" elapsed="0.012462"/>
+</kw>
+<status status="PASS" start="2026-03-14T15:18:25.086887" elapsed="0.132164"/>
+</kw>
+<kw name="Go To" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:25.220094" level="INFO">Opening url 'http://127.0.0.1:5500/index.html'</msg>
+<arg>${BASE_URL}</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<status status="PASS" start="2026-03-14T15:18:25.219051" elapsed="0.081312"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>css:#filter-bar</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-14T15:18:25.300363" elapsed="0.026088"/>
+</kw>
+<kw name="Get Element Count" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:25.336965" level="INFO">${before} = 14</msg>
+<var>${before}</var>
+<arg>css:#filter-bar .filter-btn</arg>
+<doc>Returns the number of elements matching ``locator``.</doc>
+<status status="PASS" start="2026-03-14T15:18:25.326451" elapsed="0.010514"/>
+</kw>
+<kw name="Get Element Count" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:25.348246" level="INFO">${toggle_count} = 1</msg>
+<var>${toggle_count}</var>
+<arg>css:#filter-bar [data-action="toggle-categories"]</arg>
+<doc>Returns the number of elements matching ``locator``.</doc>
+<status status="PASS" start="2026-03-14T15:18:25.336965" elapsed="0.011281"/>
+</kw>
+<kw name="Run Keyword If" owner="BuiltIn">
+<kw name="Scroll Element Into View" owner="SeleniumLibrary">
+<arg>css:#filter-bar [data-action="toggle-categories"]</arg>
+<doc>Scrolls the element identified by ``locator`` into view.</doc>
+<status status="PASS" start="2026-03-14T15:18:25.349272" elapsed="0.278777"/>
+</kw>
+<arg>${toggle_count} &gt; 0</arg>
+<arg>Scroll Element Into View</arg>
+<arg>css:#filter-bar [data-action="toggle-categories"]</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" start="2026-03-14T15:18:25.349272" elapsed="0.278777"/>
+</kw>
+<kw name="Run Keyword If" owner="BuiltIn">
+<kw name="Wait Until Keyword Succeeds" owner="BuiltIn">
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:25.629057" level="INFO">Clicking element 'css:#filter-bar [data-action="toggle-categories"]'.</msg>
+<arg>css:#filter-bar [data-action="toggle-categories"]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-14T15:18:25.629057" elapsed="0.082045"/>
+</kw>
+<arg>5x</arg>
+<arg>500ms</arg>
+<arg>Click Element</arg>
+<arg>css:#filter-bar [data-action="toggle-categories"]</arg>
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<status status="PASS" start="2026-03-14T15:18:25.629057" elapsed="0.083120"/>
+</kw>
+<arg>${toggle_count} &gt; 0</arg>
+<arg>Wait Until Keyword Succeeds</arg>
+<arg>5x</arg>
+<arg>500ms</arg>
+<arg>Click Element</arg>
+<arg>css:#filter-bar [data-action="toggle-categories"]</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" start="2026-03-14T15:18:25.628049" elapsed="0.084128"/>
+</kw>
+<kw name="Get Element Count" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:25.747773" level="INFO">${expanded} = 69</msg>
+<var>${expanded}</var>
+<arg>css:#filter-bar .filter-btn</arg>
+<doc>Returns the number of elements matching ``locator``.</doc>
+<status status="PASS" start="2026-03-14T15:18:25.712177" elapsed="0.035596"/>
+</kw>
+<kw name="Run Keyword If" owner="BuiltIn">
+<kw name="Should Be True" owner="BuiltIn">
+<arg>${expanded} &gt;= ${before}</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="PASS" start="2026-03-14T15:18:25.748774" elapsed="0.000000"/>
+</kw>
+<arg>${toggle_count} &gt; 0</arg>
+<arg>Should Be True</arg>
+<arg>${expanded} &gt;= ${before}</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" start="2026-03-14T15:18:25.748774" elapsed="0.000000"/>
+</kw>
+<kw name="Run Keyword If" owner="BuiltIn">
+<kw name="Wait Until Keyword Succeeds" owner="BuiltIn">
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:25.749802" level="INFO">Clicking element 'css:#filter-bar [data-action="toggle-categories"]'.</msg>
+<msg time="2026-03-14T15:18:26.924818" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-12.png"&gt;&lt;img src="selenium-screenshot-12.png" width="800px"&gt;&lt;/a&gt;</msg>
+<msg time="2026-03-14T15:18:26.924818" level="FAIL">ElementClickInterceptedException: Message: element click intercepted: Element is not clickable at point (873, 1023)
+  (Session info: chrome=145.0.7632.162); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#elementclickinterceptedexception
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff6ab24aa55
+	0x7ff6aafa8630
+	0x7ff6aad3d75d
+	0x7ff6aada0b65
+	0x7ff6aad9e27a
+	0x7ff6aad9b115
+	0x7ff6aad99fc7
+	0x7ff6aad8b426
+	0x7ff6aadc19da
+	0x7ff6aad8aca6
+	0x7ff6aade591c
+	0x7ff6aad89098
+	0x7ff6aad89f83
+	0x7ff6ab277810
+	0x7ff6ab271afd
+	0x7ff6ab292c1a
+	0x7ff6aafc3345
+	0x7ff6aafcb81c
+	0x7ff6aafb1924
+	0x7ff6aafb1ad6
+	0x7ff6aaf97e47
+	0x7ff86b50e8d7
+	0x7ff86d58c48c
+</msg>
+<arg>css:#filter-bar [data-action="toggle-categories"]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="FAIL" start="2026-03-14T15:18:25.749802" elapsed="1.178424">ElementClickInterceptedException: Message: element click intercepted: Element is not clickable at point (873, 1023)
+  (Session info: chrome=145.0.7632.162); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#elementclickinterceptedexception
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff6ab24aa55
+	0x7ff6aafa8630
+	0x7ff6aad3d75d
+	0x7ff6aada0b65
+	0x7ff6aad9e27a
+	0x7ff6aad9b115
+	0x7ff6aad99fc7
+	0x7ff6aad8b426
+	0x7ff6aadc19da
+	0x7ff6aad8aca6
+	0x7ff6aade591c
+	0x7ff6aad89098
+	0x7ff6aad89f83
+	0x7ff6ab277810
+	0x7ff6ab271afd
+	0x7ff6ab292c1a
+	0x7ff6aafc3345
+	0x7ff6aafcb81c
+	0x7ff6aafb1924
+	0x7ff6aafb1ad6
+	0x7ff6aaf97e47
+	0x7ff86b50e8d7
+	0x7ff86d58c48c
+</status>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:27.429051" level="INFO">Clicking element 'css:#filter-bar [data-action="toggle-categories"]'.</msg>
+<arg>css:#filter-bar [data-action="toggle-categories"]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-14T15:18:27.428512" elapsed="0.086133"/>
+</kw>
+<arg>5x</arg>
+<arg>500ms</arg>
+<arg>Click Element</arg>
+<arg>css:#filter-bar [data-action="toggle-categories"]</arg>
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<status status="PASS" start="2026-03-14T15:18:25.749802" elapsed="1.764843"/>
+</kw>
+<arg>${toggle_count} &gt; 0</arg>
+<arg>Wait Until Keyword Succeeds</arg>
+<arg>5x</arg>
+<arg>500ms</arg>
+<arg>Click Element</arg>
+<arg>css:#filter-bar [data-action="toggle-categories"]</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" start="2026-03-14T15:18:25.749802" elapsed="1.764843"/>
+</kw>
+<status status="PASS" start="2026-03-14T15:18:25.085886" elapsed="2.428759"/>
+</test>
+<test id="s1-t3" name="Add Product To Cart Flow Works" line="35">
+<kw name="Reset App State">
+<kw name="Execute Javascript" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:27.515734" level="INFO">Executing JavaScript:
+window.localStorage.removeItem('te_cart');
+Without any arguments.</msg>
+<arg>window.localStorage.removeItem('te_cart');</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<status status="PASS" start="2026-03-14T15:18:27.515734" elapsed="0.009941"/>
+</kw>
+<kw name="Execute Javascript" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:27.525675" level="INFO">Executing JavaScript:
+window.localStorage.removeItem('te_orders');
+Without any arguments.</msg>
+<arg>window.localStorage.removeItem('te_orders');</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<status status="PASS" start="2026-03-14T15:18:27.525675" elapsed="0.004149"/>
+</kw>
+<kw name="Execute Javascript" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:27.531006" level="INFO">Executing JavaScript:
+window.localStorage.removeItem('te_session');
+Without any arguments.</msg>
+<arg>window.localStorage.removeItem('te_session');</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<status status="PASS" start="2026-03-14T15:18:27.531006" elapsed="0.004795"/>
+</kw>
+<kw name="Execute Javascript" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:27.535801" level="INFO">Executing JavaScript:
+window.localStorage.removeItem('te_products');
+Without any arguments.</msg>
+<arg>window.localStorage.removeItem('te_products');</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<status status="PASS" start="2026-03-14T15:18:27.535801" elapsed="0.006034"/>
+</kw>
+<kw name="Go To" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:27.541835" level="INFO">Opening url 'http://127.0.0.1:5500/index.html'</msg>
+<arg>${BASE_URL}</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<status status="PASS" start="2026-03-14T15:18:27.541835" elapsed="0.079543"/>
+</kw>
+<kw name="Wait Until Page Contains" owner="SeleniumLibrary">
+<arg>Tools Easy</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="PASS" start="2026-03-14T15:18:27.621378" elapsed="0.014433"/>
+</kw>
+<status status="PASS" start="2026-03-14T15:18:27.515734" elapsed="0.120077"/>
+</kw>
+<kw name="Go To" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:27.636999" level="INFO">Opening url 'http://127.0.0.1:5500/index.html'</msg>
+<arg>${BASE_URL}</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<status status="PASS" start="2026-03-14T15:18:27.636999" elapsed="0.080155"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>css:#product-grid a[href*="product.html?id="]</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-14T15:18:27.717154" elapsed="0.035344"/>
+</kw>
+<kw name="Get WebElement" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:27.771106" level="INFO">${link} = &lt;selenium.webdriver.remote.webelement.WebElement (session="babf81ae9f4d70064d9c8256d34ee2a6", element="f.C4BF25FBDF6BF71803FC512748E19DF0.d.50D853FE08C989FF5521655968978F50.e.371")&gt;</msg>
+<var>${link}</var>
+<arg>css:#product-grid a[href*="product.html?id="]</arg>
+<doc>Returns the first WebElement matching the given ``locator``.</doc>
+<status status="PASS" start="2026-03-14T15:18:27.753507" elapsed="0.017599"/>
+</kw>
+<kw name="Execute Javascript" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:27.771106" level="INFO">Executing JavaScript:
+arguments[0].click();
+By using argument:
+'&lt;selenium.webdriver.remote.webelement.WebElement (session="babf81ae9f4d70064d9c8256d34ee2a6", element="f.C4BF25FBDF6BF71803FC512748E19DF0.d.50D853FE08C989FF5521655968978F50.e.371")&gt;'</msg>
+<arg>arguments[0].click();</arg>
+<arg>ARGUMENTS</arg>
+<arg>${link}</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<status status="PASS" start="2026-03-14T15:18:27.771106" elapsed="0.061955"/>
+</kw>
+<kw name="Wait Until Location Contains" owner="SeleniumLibrary">
+<arg>product.html</arg>
+<doc>Waits until the current URL contains ``expected``.</doc>
+<status status="PASS" start="2026-03-14T15:18:27.833061" elapsed="0.012671"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>id:add-to-cart-btn</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-14T15:18:27.845732" elapsed="0.021266"/>
+</kw>
+<kw name="Click Button" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:27.866998" level="INFO">Clicking button 'id:add-to-cart-btn'.</msg>
+<arg>id:add-to-cart-btn</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-14T15:18:27.866998" elapsed="0.101016"/>
+</kw>
+<kw name="Go To" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:27.968014" level="INFO">Opening url 'http://127.0.0.1:5500/cart.html'</msg>
+<arg>${CART_URL}</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<status status="PASS" start="2026-03-14T15:18:27.968014" elapsed="0.053134"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>css:#cart-container</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-14T15:18:28.021148" elapsed="0.026642"/>
+</kw>
+<kw name="Get Element Count" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:28.057360" level="INFO">${items} = 1</msg>
+<var>${items}</var>
+<arg>css:.cart-item</arg>
+<doc>Returns the number of elements matching ``locator``.</doc>
+<status status="PASS" start="2026-03-14T15:18:28.047790" elapsed="0.009570"/>
+</kw>
+<kw name="Should Be True" owner="BuiltIn">
+<arg>${items} &gt; 0</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="PASS" start="2026-03-14T15:18:28.057360" elapsed="0.001025"/>
+</kw>
+<status status="PASS" start="2026-03-14T15:18:27.514645" elapsed="0.543740"/>
+</test>
+<test id="s1-t4" name="Register And Login Flow Works" line="49">
+<kw name="Reset App State">
+<kw name="Execute Javascript" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:28.059390" level="INFO">Executing JavaScript:
+window.localStorage.removeItem('te_cart');
+Without any arguments.</msg>
+<arg>window.localStorage.removeItem('te_cart');</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<status status="PASS" start="2026-03-14T15:18:28.059390" elapsed="0.003935"/>
+</kw>
+<kw name="Execute Javascript" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:28.064649" level="INFO">Executing JavaScript:
+window.localStorage.removeItem('te_orders');
+Without any arguments.</msg>
+<arg>window.localStorage.removeItem('te_orders');</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<status status="PASS" start="2026-03-14T15:18:28.064649" elapsed="0.004070"/>
+</kw>
+<kw name="Execute Javascript" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:28.070179" level="INFO">Executing JavaScript:
+window.localStorage.removeItem('te_session');
+Without any arguments.</msg>
+<arg>window.localStorage.removeItem('te_session');</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<status status="PASS" start="2026-03-14T15:18:28.068719" elapsed="0.006307"/>
+</kw>
+<kw name="Execute Javascript" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:28.076414" level="INFO">Executing JavaScript:
+window.localStorage.removeItem('te_products');
+Without any arguments.</msg>
+<arg>window.localStorage.removeItem('te_products');</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<status status="PASS" start="2026-03-14T15:18:28.075026" elapsed="0.006165"/>
+</kw>
+<kw name="Go To" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:28.081191" level="INFO">Opening url 'http://127.0.0.1:5500/index.html'</msg>
+<arg>${BASE_URL}</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<status status="PASS" start="2026-03-14T15:18:28.081191" elapsed="0.149408"/>
+</kw>
+<kw name="Wait Until Page Contains" owner="SeleniumLibrary">
+<arg>Tools Easy</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="PASS" start="2026-03-14T15:18:28.231590" elapsed="0.030423"/>
+</kw>
+<status status="PASS" start="2026-03-14T15:18:28.058385" elapsed="0.203628"/>
+</kw>
+<kw name="Create Unique Email">
+<kw name="Evaluate" owner="BuiltIn">
+<msg time="2026-03-14T15:18:28.263015" level="INFO">${ts} = 1773476308263</msg>
+<var>${ts}</var>
+<arg>int(__import__('time').time()*1000)</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2026-03-14T15:18:28.262013" elapsed="0.001002"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2026-03-14T15:18:28.263015" level="INFO">${email} = robot_1773476308263@toolseasy.test</msg>
+<var>${email}</var>
+<arg>robot_${ts}@toolseasy.test</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2026-03-14T15:18:28.263015" elapsed="0.000000"/>
+</kw>
+<return>
+<value>${email}</value>
+<status status="PASS" start="2026-03-14T15:18:28.263015" elapsed="0.000000"/>
+</return>
+<msg time="2026-03-14T15:18:28.263015" level="INFO">${email} = robot_1773476308263@toolseasy.test</msg>
+<var>${email}</var>
+<status status="PASS" start="2026-03-14T15:18:28.262013" elapsed="0.001002"/>
+</kw>
+<kw name="Go To" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:28.264019" level="INFO">Opening url 'http://127.0.0.1:5500/register.html'</msg>
+<arg>${REGISTER_URL}</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<status status="PASS" start="2026-03-14T15:18:28.264019" elapsed="0.039885"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>id:register-form</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-14T15:18:28.303904" elapsed="0.235161"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:28.539065" level="INFO">Typing text 'Robot Tester' into text field 'id:reg-name'.</msg>
+<arg>id:reg-name</arg>
+<arg>Robot Tester</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-14T15:18:28.539065" elapsed="0.099541"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:28.638606" level="INFO">Typing text 'robot_1773476308263@toolseasy.test' into text field 'id:reg-email'.</msg>
+<arg>id:reg-email</arg>
+<arg>${email}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-14T15:18:28.638606" elapsed="0.094045"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:28.733206" level="INFO">Typing text 'Robot@1234' into text field 'id:reg-password'.</msg>
+<arg>id:reg-password</arg>
+<arg>Robot@1234</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-14T15:18:28.733206" elapsed="0.073135"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:28.807856" level="INFO">Typing text 'Robot@1234' into text field 'id:reg-confirm'.</msg>
+<arg>id:reg-confirm</arg>
+<arg>Robot@1234</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-14T15:18:28.806341" elapsed="0.075666"/>
+</kw>
+<kw name="Click Button" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:28.882007" level="INFO">Clicking button 'css:#register-form button[type="submit"]'.</msg>
+<arg>css:#register-form button[type="submit"]</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-14T15:18:28.882007" elapsed="0.079022"/>
+</kw>
+<kw name="Wait Until Location Contains" owner="SeleniumLibrary">
+<arg>login.html</arg>
+<arg>timeout=10s</arg>
+<doc>Waits until the current URL contains ``expected``.</doc>
+<status status="PASS" start="2026-03-14T15:18:28.961029" elapsed="1.241894"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:30.205183" level="INFO">Typing text 'robot_1773476308263@toolseasy.test' into text field 'id:login-email'.</msg>
+<arg>id:login-email</arg>
+<arg>${email}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-14T15:18:30.202923" elapsed="0.081756"/>
+</kw>
+<kw name="Input Password" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:30.284679" level="INFO">Typing password into text field 'id:login-password'.</msg>
+<msg time="2026-03-14T15:18:30.315276" level="INFO">Temporally setting log level to: NONE</msg>
+<arg>id:login-password</arg>
+<arg>Robot@1234</arg>
+<doc>Types the given password into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-14T15:18:30.284679" elapsed="0.070573"/>
+</kw>
+<kw name="Click Button" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:30.356021" level="INFO">Clicking button 'css:#login-form button[type="submit"]'.</msg>
+<arg>css:#login-form button[type="submit"]</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-14T15:18:30.355252" elapsed="0.106307"/>
+</kw>
+<kw name="Wait Until Location Is" owner="SeleniumLibrary">
+<arg>${BASE_URL}</arg>
+<arg>timeout=10s</arg>
+<doc>Waits until the current URL is ``expected``.</doc>
+<status status="PASS" start="2026-03-14T15:18:30.461559" elapsed="1.095751"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>id:nav-logout</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-14T15:18:31.557310" elapsed="0.022568"/>
+</kw>
+<status status="PASS" start="2026-03-14T15:18:28.058385" elapsed="3.521493"/>
+</test>
+<test id="s1-t5" name="Checkout And Orders Success Flow Works" line="68">
+<kw name="Reset App State">
+<kw name="Execute Javascript" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:31.581008" level="INFO">Executing JavaScript:
+window.localStorage.removeItem('te_cart');
+Without any arguments.</msg>
+<arg>window.localStorage.removeItem('te_cart');</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<status status="PASS" start="2026-03-14T15:18:31.581008" elapsed="0.005212"/>
+</kw>
+<kw name="Execute Javascript" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:31.586220" level="INFO">Executing JavaScript:
+window.localStorage.removeItem('te_orders');
+Without any arguments.</msg>
+<arg>window.localStorage.removeItem('te_orders');</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<status status="PASS" start="2026-03-14T15:18:31.586220" elapsed="0.007757"/>
+</kw>
+<kw name="Execute Javascript" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:31.594528" level="INFO">Executing JavaScript:
+window.localStorage.removeItem('te_session');
+Without any arguments.</msg>
+<arg>window.localStorage.removeItem('te_session');</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<status status="PASS" start="2026-03-14T15:18:31.594528" elapsed="0.005338"/>
+</kw>
+<kw name="Execute Javascript" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:31.600426" level="INFO">Executing JavaScript:
+window.localStorage.removeItem('te_products');
+Without any arguments.</msg>
+<arg>window.localStorage.removeItem('te_products');</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<status status="PASS" start="2026-03-14T15:18:31.600426" elapsed="0.007320"/>
+</kw>
+<kw name="Go To" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:31.608283" level="INFO">Opening url 'http://127.0.0.1:5500/index.html'</msg>
+<arg>${BASE_URL}</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<status status="PASS" start="2026-03-14T15:18:31.607746" elapsed="0.078681"/>
+</kw>
+<kw name="Wait Until Page Contains" owner="SeleniumLibrary">
+<arg>Tools Easy</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="PASS" start="2026-03-14T15:18:31.686427" elapsed="0.016006"/>
+</kw>
+<status status="PASS" start="2026-03-14T15:18:31.581008" elapsed="0.122426"/>
+</kw>
+<kw name="Go To" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:31.703434" level="INFO">Opening url 'http://127.0.0.1:5500/index.html'</msg>
+<arg>${BASE_URL}</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<status status="PASS" start="2026-03-14T15:18:31.703434" elapsed="0.077582"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>css:#product-grid a[href*="product.html?id="]</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-14T15:18:31.781016" elapsed="0.033423"/>
+</kw>
+<kw name="Get WebElement" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:31.829345" level="INFO">${link} = &lt;selenium.webdriver.remote.webelement.WebElement (session="babf81ae9f4d70064d9c8256d34ee2a6", element="f.C4BF25FBDF6BF71803FC512748E19DF0.d.BD04474DE3745401EB37CF2FF20C1E66.e.613")&gt;</msg>
+<var>${link}</var>
+<arg>css:#product-grid a[href*="product.html?id="]</arg>
+<doc>Returns the first WebElement matching the given ``locator``.</doc>
+<status status="PASS" start="2026-03-14T15:18:31.815436" elapsed="0.013909"/>
+</kw>
+<kw name="Execute Javascript" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:31.830367" level="INFO">Executing JavaScript:
+arguments[0].click();
+By using argument:
+'&lt;selenium.webdriver.remote.webelement.WebElement (session="babf81ae9f4d70064d9c8256d34ee2a6", element="f.C4BF25FBDF6BF71803FC512748E19DF0.d.BD04474DE3745401EB37CF2FF20C1E66.e.613")&gt;'</msg>
+<arg>arguments[0].click();</arg>
+<arg>ARGUMENTS</arg>
+<arg>${link}</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<status status="PASS" start="2026-03-14T15:18:31.829345" elapsed="0.036375"/>
+</kw>
+<kw name="Wait Until Location Contains" owner="SeleniumLibrary">
+<arg>product.html</arg>
+<doc>Waits until the current URL contains ``expected``.</doc>
+<status status="PASS" start="2026-03-14T15:18:31.865720" elapsed="0.010672"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>id:add-to-cart-btn</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-14T15:18:31.876392" elapsed="0.014697"/>
+</kw>
+<kw name="Click Button" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:31.892098" level="INFO">Clicking button 'id:add-to-cart-btn'.</msg>
+<arg>id:add-to-cart-btn</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-14T15:18:31.892098" elapsed="0.069146"/>
+</kw>
+<kw name="Go To" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:31.961244" level="INFO">Opening url 'http://127.0.0.1:5500/checkout.html'</msg>
+<arg>${CHECKOUT_URL}</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<status status="PASS" start="2026-03-14T15:18:31.961244" elapsed="0.057527"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>id:checkout-form</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-14T15:18:32.019771" elapsed="0.033744"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:32.054516" level="INFO">Typing text '123 Robot Road' into text field 'id:shipping-address'.</msg>
+<arg>id:shipping-address</arg>
+<arg>123 Robot Road</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-14T15:18:32.053515" elapsed="0.075124"/>
+</kw>
+<kw name="Select From List By Value" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:32.128639" level="INFO">Selecting options from selection list 'id:shipping-city' by value กรุงเทพมหานคร.</msg>
+<arg>id:shipping-city</arg>
+<arg>กรุงเทพมหานคร</arg>
+<doc>Selects options from selection list ``locator`` by ``values``.</doc>
+<status status="PASS" start="2026-03-14T15:18:32.128639" elapsed="0.081117"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:32.209756" level="INFO">Typing text '0812345678' into text field 'id:shipping-phone'.</msg>
+<arg>id:shipping-phone</arg>
+<arg>0812345678</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-14T15:18:32.209756" elapsed="0.080055"/>
+</kw>
+<kw name="Get WebElement" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:32.300851" level="INFO">${submit_btn} = &lt;selenium.webdriver.remote.webelement.WebElement (session="babf81ae9f4d70064d9c8256d34ee2a6", element="f.C4BF25FBDF6BF71803FC512748E19DF0.d.10A79016536E73C76150B95050690D69.e.796")&gt;</msg>
+<var>${submit_btn}</var>
+<arg>css:#checkout-form button[type="submit"]</arg>
+<doc>Returns the first WebElement matching the given ``locator``.</doc>
+<status status="PASS" start="2026-03-14T15:18:32.289811" elapsed="0.011040"/>
+</kw>
+<kw name="Execute Javascript" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:32.300851" level="INFO">Executing JavaScript:
+arguments[0].scrollIntoView({block: 'center'});
+By using argument:
+'&lt;selenium.webdriver.remote.webelement.WebElement (session="babf81ae9f4d70064d9c8256d34ee2a6", element="f.C4BF25FBDF6BF71803FC512748E19DF0.d.10A79016536E73C76150B95050690D69.e.796")&gt;'</msg>
+<arg>arguments[0].scrollIntoView({block: 'center'});</arg>
+<arg>ARGUMENTS</arg>
+<arg>${submit_btn}</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<status status="PASS" start="2026-03-14T15:18:32.300851" elapsed="0.007174"/>
+</kw>
+<kw name="Execute Javascript" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:32.308025" level="INFO">Executing JavaScript:
+arguments[0].click();
+By using argument:
+'&lt;selenium.webdriver.remote.webelement.WebElement (session="babf81ae9f4d70064d9c8256d34ee2a6", element="f.C4BF25FBDF6BF71803FC512748E19DF0.d.10A79016536E73C76150B95050690D69.e.796")&gt;'</msg>
+<arg>arguments[0].click();</arg>
+<arg>ARGUMENTS</arg>
+<arg>${submit_btn}</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<status status="PASS" start="2026-03-14T15:18:32.308025" elapsed="0.007106"/>
+</kw>
+<kw name="Wait Until Location Contains" owner="SeleniumLibrary">
+<arg>orders.html?success=</arg>
+<arg>timeout=15s</arg>
+<doc>Waits until the current URL contains ``expected``.</doc>
+<status status="PASS" start="2026-03-14T15:18:32.315131" elapsed="2.074940"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>id:success-order-id</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-14T15:18:34.390071" elapsed="0.019905"/>
+</kw>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:34.431483" level="INFO">${order_id} = ORD-DSEV</msg>
+<var>${order_id}</var>
+<arg>id:success-order-id</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-14T15:18:34.409976" elapsed="0.021507"/>
+</kw>
+<kw name="Should Match Regexp" owner="BuiltIn">
+<arg>${order_id}</arg>
+<arg>^ORD-[A-Z0-9]{4}$</arg>
+<doc>Fails if ``string`` does not match ``pattern`` as a regular expression.</doc>
+<status status="PASS" start="2026-03-14T15:18:34.431483" elapsed="0.000000"/>
+</kw>
+<kw name="Go To" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:34.431483" level="INFO">Opening url 'http://127.0.0.1:5500/orders.html'</msg>
+<arg>${ORDERS_URL}</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<status status="PASS" start="2026-03-14T15:18:34.431483" elapsed="0.033796"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>css:#orders-view</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-14T15:18:34.465279" elapsed="0.019934"/>
+</kw>
+<kw name="Get Element Count" owner="SeleniumLibrary">
+<msg time="2026-03-14T15:18:34.495047" level="INFO">${rows} = 1</msg>
+<var>${rows}</var>
+<arg>css:#orders-tbody tr</arg>
+<doc>Returns the number of elements matching ``locator``.</doc>
+<status status="PASS" start="2026-03-14T15:18:34.485213" elapsed="0.010824"/>
+</kw>
+<kw name="Should Be True" owner="BuiltIn">
+<arg>${rows} &gt; 0</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="PASS" start="2026-03-14T15:18:34.496037" elapsed="0.000000"/>
+</kw>
+<status status="PASS" start="2026-03-14T15:18:31.579878" elapsed="2.916159"/>
+</test>
+<kw name="Close All Browsers" owner="SeleniumLibrary" type="TEARDOWN">
+<doc>Closes all open browsers and resets the browser cache.</doc>
+<status status="PASS" start="2026-03-14T15:18:34.497031" elapsed="2.170474"/>
+</kw>
+<status status="PASS" start="2026-03-14T15:18:23.153442" elapsed="13.514063"/>
+</suite>
+<statistics>
+<total>
+<stat pass="5" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat name="E2E" id="s1" pass="5" fail="0" skip="0">E2E</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
